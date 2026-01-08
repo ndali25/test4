@@ -2,30 +2,52 @@ Project: On_the_Expansion_of_Risk_Pooling
 Authors: Michail Anthropelos, Runhuan Feng, Seongyoon Kim
 
 # Purpose
-Automatically execute the Python notebook analysis/Code_On_the_Expansion_of_Risk_Pooling.ipynb.
+Automatically execute the main Python notebook and save outputs.
 Do not start a Jupyter server.
 Do not run LaTeX.
-Save outputs in 99_logs/.
+Headless, fully automated.
 
-# Inputs
-Notebook: analysis/Code_On_the_Expansion_of_Risk_Pooling.ipynb
-Data: analysis/CCRIF_TC.csv, analysis/CCRIF_TC_Info.csv, analysis/Health_data.xlsx
+# Input Notebook
+analysis/Code_On_the_Expansion_of_Risk_Pooling.ipynb
 
-# Outputs
-Folder: 99_logs/
-Contains: executed_notebook.ipynb, figures, tables
+# Input Data
+analysis/CCRIF_TC.csv
+analysis/CCRIF_TC_Info.csv
+analysis/Health_data.xlsx
 
-# Environment
+# Output Folder
+99_logs/
+Contains: executed_notebook.ipynb, generated figures, tables
+
+# Python Environment
 Base image: python:3.11-slim
-Packages: numpy, pandas, matplotlib, scipy, tqdm, jupyter, nbconvert
+Required packages:
+- numpy
+- pandas
+- matplotlib
+- scipy
+- tqdm
+- jupyter
+- nbconvert
+- openpyxl
 
-# Instructions for Dockerfile
+# Dockerfile Instructions
 1. WORKDIR /app
 2. COPY all files into /app
-3. Install required Python packages (pip install)
+3. Install required Python packages using pip
 4. Create folder /app/99_logs
-5. CMD: Execute notebook headlessly using nbconvert:
+5. CMD: Execute notebook automatically using nbconvert:
    jupyter nbconvert --to notebook --execute analysis/Code_On_the_Expansion_of_Risk_Pooling.ipynb --output executed_notebook.ipynb
    Move executed_notebook.ipynb to /app/99_logs/
 6. Do NOT expose ports
 7. Do NOT start interactive Jupyter server
+
+# Build Docker Image
+docker build -t test4-python -f Dockerfile.python .
+
+# Run Container
+docker run --rm -v "$(pwd)/99_logs:/app/99_logs" test4-python
+
+# Check Outputs
+ls 99_logs/
+# Should contain executed_notebook.ipynb and all figures/tables
