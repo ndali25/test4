@@ -1,116 +1,92 @@
 # On_the_Expansion_of_Risk_Pooling
 
-## Project Metadata
-- **Project Name**: On_the_Expansion_of_Risk_Pooling
-- **Authors**: Michail Anthropelos, Runhuan Feng, Seongyoon Kim
-- **Execution Type**: Automatic Headless Execution
+## DOCKERFILE GENERATION INSTRUCTIONS
 
-## CRITICAL: Dockerfile Must Auto-Execute Notebook
-
-This container must AUTOMATICALLY EXECUTE the Jupyter notebook on startup and then exit.
-**DO NOT start an interactive Jupyter server.**
-
-## MANDATORY Dockerfile Structure
-
-### Base Image
+### STEP 1: Base Image Line
 ```
 FROM python:3.11-slim
 ```
+**RULE: Use ONLY python:3.11-slim. Do NOT use jupyter/minimal-notebook.**
 
-### Working Directory
+### STEP 2: Working Directory Line
 ```
 WORKDIR /app
 ```
+**RULE: Use ONLY /app. Do NOT use /home/jovyan/work.**
 
-### Copy All Files
+### STEP 3: Copy Files Line
 ```
 COPY . /app
 ```
 
-### Install ALL Required Packages
+### STEP 4: Install Packages Line
 ```
 RUN pip install --no-cache-dir notebook pandas openpyxl matplotlib numpy scipy nbconvert
 ```
+**RULE: Install these exact packages: notebook pandas openpyxl matplotlib numpy scipy nbconvert**
 
-**CRITICAL: Must install nbconvert for headless execution**
-
-### Create Output Directory
+### STEP 5: Create Output Directory Line
 ```
 RUN mkdir -p /app/outputs
 ```
 
-### Automatic Execution Command
+### STEP 6: Execution Command Line
 ```
 CMD ["jupyter", "nbconvert", "--to", "notebook", "--execute", "On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb", "--output", "/app/outputs/executed_notebook.ipynb", "--ExecutePreprocessor.timeout=600"]
 ```
+**RULE: Use jupyter nbconvert with --execute flag. Do NOT use start-notebook.sh**
 
-## Complete Dockerfile (EXACT FORMAT REQUIRED)
+## COMPLETE DOCKERFILE - COPY EXACTLY
 ```dockerfile
 FROM python:3.11-slim
-
 WORKDIR /app
-
 COPY . /app
-
 RUN pip install --no-cache-dir notebook pandas openpyxl matplotlib numpy scipy nbconvert
-
 RUN mkdir -p /app/outputs
-
 CMD ["jupyter", "nbconvert", "--to", "notebook", "--execute", "On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb", "--output", "/app/outputs/executed_notebook.ipynb", "--ExecutePreprocessor.timeout=600"]
 ```
 
-## Required Python Packages
-1. notebook - Jupyter notebook infrastructure
-2. pandas - Data manipulation
-3. openpyxl - Excel file support
-4. matplotlib - Plotting
-5. numpy - Numerical computing
-6. scipy - Scientific computing
-7. nbconvert - **CRITICAL for headless notebook execution**
+## PROHIBITED COMMANDS - DO NOT USE
 
-## Input Notebook
-```
-On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb
-```
+❌ FROM jupyter/minimal-notebook
+❌ WORKDIR /home/jovyan
+❌ USER jovyan
+❌ EXPOSE 8888
+❌ start-notebook.sh
+❌ RUN pip install jupyterlab
+❌ --NotebookApp.token
 
-## Output Configuration
-- **Output Directory**: /app/outputs
-- **Output File**: executed_notebook.ipynb
-- **Execution Timeout**: 600 seconds
+## PROJECT INFORMATION
 
-## Execution Behavior
+**Project Name**: On_the_Expansion_of_Risk_Pooling
+**Authors**: Michail Anthropelos, Runhuan Feng, Seongyoon Kim
+**Notebook Path**: On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb
+**Execution Mode**: Headless automatic execution
+**Container Type**: Non-interactive batch processing
+
+## PACKAGE REQUIREMENTS
+
+Required packages that MUST be installed:
+- notebook (for Jupyter infrastructure)
+- pandas (data processing)
+- openpyxl (Excel file reading)
+- matplotlib (plotting)
+- numpy (numerical operations)
+- scipy (scientific computing)
+- nbconvert (notebook execution - CRITICAL)
+
+## EXECUTION SPECIFICATIONS
+
+- **Method**: nbconvert with --execute flag
+- **Timeout**: 600 seconds
+- **Output Location**: /app/outputs/executed_notebook.ipynb
+- **Behavior**: Execute notebook and exit (no server)
+- **Ports**: None (headless execution)
+
+## CONTAINER BEHAVIOR
+
 1. Container starts
-2. Automatically executes the notebook using nbconvert
-3. Saves executed notebook with all outputs to /app/outputs/
-4. Container exits after completion
-
-## Forbidden Elements
-
-**DO NOT include:**
-- EXPOSE directives (no ports needed)
-- Interactive Jupyter server commands
-- `jupyter notebook` command (use `jupyter nbconvert` instead)
-- USER or permission commands
-- start-notebook.sh scripts
-
-## How to Run
-
-**Build:**
-```bash
-docker build -t risk-pooling-exec .
-```
-
-**Run (outputs will be in container):**
-```bash
-docker run --name risk-pooling-run risk-pooling-exec
-```
-
-**Copy outputs to host:**
-```bash
-docker cp risk-pooling-run:/app/outputs/executed_notebook.ipynb ./
-```
-
-**Or run with volume mount:**
-```bash
-docker run -v $(pwd)/outputs:/app/outputs risk-pooling-exec
-```
+2. Runs jupyter nbconvert to execute notebook
+3. Saves executed notebook to /app/outputs/
+4. Container exits automatically
+5. No interactive server runs
