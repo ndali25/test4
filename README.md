@@ -5,41 +5,38 @@ On_the_Expansion_of_Risk_Pooling
 Michail Anthropelos, Runhuan Feng, Seongyoon Kim
 
 # Purpose
-This README specifies an automated workflow for executing the Python notebook 
-that generates all results for the manuscript and E-companion. 
-No LaTeX compilation or browser interaction is included.
+Automatically execute the main Python notebook and save all outputs.
+No Jupyter server or LaTeX compilation.
 
-# Required Files
+# Input Notebook
 analysis/Code_On_the_Expansion_of_Risk_Pooling.ipynb
+
+# Input Data
 analysis/CCRIF_TC.csv
 analysis/CCRIF_TC_Info.csv
 analysis/Health_data.xlsx
 
 # Output Folder
-All outputs (executed notebook, figures, tables) are stored in 99_logs/
+99_logs/
+- executed_notebook.ipynb
+- generated figures and tables
 
-# Dockerfile Instructions
-1. Base image: python:3.11-slim
-2. Working directory: /app
-3. Copy all files into container
-4. Install Python packages: numpy, pandas, matplotlib, scipy, tqdm, jupyter, nbconvert
-5. Create folder /app/99_logs
-6. Command to run automatically when container starts:
-   - Execute notebook:
-       jupyter nbconvert --to notebook --execute analysis/Code_On_the_Expansion_of_Risk_Pooling.ipynb
-   - Save output as executed_notebook.ipynb in /app/99_logs/
+# Dockerfile Requirements
+- Base image: python:3.11-slim
+- Working directory: /app
+- Copy all project files into /app
+- Install Python packages:
+    numpy, pandas, matplotlib, scipy, tqdm, jupyter, nbconvert
+- Create folder /app/99_logs
+- CMD: Execute the notebook automatically using nbconvert:
+    jupyter nbconvert --to notebook --execute analysis/Code_On_the_Expansion_of_Risk_Pooling.ipynb --output executed_notebook.ipynb && mv executed_notebook.ipynb 99_logs/
 
 # Build Docker Image
 docker build -t test4-python -f Dockerfile.python .
 
-# Run Container (automatic notebook execution)
+# Run Container
 docker run --rm -v "$(pwd)/99_logs:/app/99_logs" --name rtest4-run test4-python
 
-# Check Results
+# Check Outputs
 ls 99_logs/
-# Should contain executed_notebook.ipynb and any generated figures/tables
-
-# Notes
-- Monte Carlo simulations may produce minor variations in results.
-- This workflow is fully automated and headless (no interactive browser needed).
-- LaTeX compilation is not included.
+# executed_notebook.ipynb and all figures/tables should be present
