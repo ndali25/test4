@@ -3,89 +3,87 @@
 ## Project Metadata
 - **Project Name**: On_the_Expansion_of_Risk_Pooling
 - **Authors**: Michail Anthropelos, Runhuan Feng, Seongyoon Kim
-- **Container Type**: python-jupyter
-- **Execution Mode**: Interactive Jupyter notebook server
 
-## Docker Configuration
+## CRITICAL: Exact Dockerfile Requirements
 
-### Base Image
+### MANDATORY Base Image
 ```
-python:3.11-slim
+FROM python:3.11-slim
 ```
+**DO NOT use jupyter/minimal-notebook or any other base image**
 
-### Working Directory
+### MANDATORY Working Directory
 ```
-/app
+WORKDIR /app
 ```
+**DO NOT use /home/jovyan/work or any other directory**
 
-## Dependencies
-
-### Python Packages (Install via pip)
-```
-notebook
-pandas
-openpyxl
-matplotlib
-numpy
-scipy
-```
-
-**Installation Command**: `pip install --no-cache-dir notebook pandas openpyxl matplotlib numpy scipy`
-
-## Project Files
-
-### Copy all project files
+### MANDATORY Copy Command
 ```
 COPY . /app
 ```
 
-### Main Notebook File
+### MANDATORY Package Installation
 ```
-On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb
+RUN pip install --no-cache-dir notebook pandas openpyxl matplotlib numpy scipy
 ```
+**Install exactly these packages in this order: notebook pandas openpyxl matplotlib numpy scipy**
 
-## Runtime Configuration
-
-### Port Exposure
+### MANDATORY Port Exposure
 ```
 EXPOSE 8888
 ```
 
-### Startup Command
-```bash
+### MANDATORY Startup Command
+```
 CMD ["jupyter", "notebook", "On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
 ```
 
-## Build Instructions for AI
+## Complete Dockerfile Structure
 
-1. Use base image: `python:3.11-slim`
-2. Set WORKDIR to `/app`
-3. COPY all project files to `/app`
-4. Install Python packages: `notebook pandas openpyxl matplotlib numpy scipy`
-5. EXPOSE port 8888
-6. Set CMD to start Jupyter notebook server with the specific notebook file
+The Dockerfile MUST follow this EXACT structure:
+```dockerfile
+FROM python:3.11-slim
 
-## Running the Container
+WORKDIR /app
 
-**Build the image:**
-```bash
-docker build -t risk-pooling .
+COPY . /app
+
+RUN pip install --no-cache-dir notebook pandas openpyxl matplotlib numpy scipy
+
+EXPOSE 8888
+
+CMD ["jupyter", "notebook", "On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
 ```
 
-**Run the container with port mapping:**
-```bash
-docker run -p 8888:8888 risk-pooling
+## Forbidden Instructions
+
+**DO NOT:**
+- Use jupyter/minimal-notebook as base image
+- Use any USER commands
+- Use chown or permission commands
+- Use start-notebook.sh
+- Use /home/jovyan directory
+- Change the working directory from /app
+- Modify the CMD command format
+- Skip any of the required packages
+
+## Required Packages
+1. notebook
+2. pandas
+3. openpyxl
+4. matplotlib
+5. numpy
+6. scipy
+
+## Notebook Path
+```
+On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb
 ```
 
-**Access Jupyter in browser:**
-```
-http://localhost:8888/tree?token=<token-from-console>
-```
-
-## Execution Details
-- **Server Type**: Jupyter Notebook
-- **Port**: 8888 (must be mapped with -p 8888:8888)
-- **IP Binding**: 0.0.0.0 (accessible from outside container)
-- **Browser**: Disabled (--no-browser)
-- **Root Access**: Allowed (--allow-root)
-- **Direct Notebook**: Opens specific notebook file on startup
+## Execution Configuration
+- Port: 8888
+- IP: 0.0.0.0
+- No browser launch
+- Allow root access
+- Direct notebook opening
