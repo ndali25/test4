@@ -1,0 +1,42 @@
+\begin{tikzpicture}[block/.style={rectangle, draw, minimum width=2cm, minimum height=3cm, align=center}]
+%%%%%%%%%%%%%%%%%%%
+\draw (0,0) rectangle (1,6);
+\draw (9,-0.5) rectangle (8,6.5);
+\draw[dashed] (-0.5,5) -- (3,5);
+\draw[dashed] (-0.5,1) -- (3,1);
+\draw[dashed] (7.5,5) -- (9.5,5);
+\draw[dashed] (7.5,2) -- (9.5,2);
+\draw[black] (8,4.5) -- (9,4.5);
+\draw[black] (8,3) -- (9,3);
+\draw[->, >=latex] (4,3) -- (7.9,2.6);
+\draw[->, >=latex] (5.65,5.95) -- (1.4,4);
+\draw[->, >=latex] (5.65,1.5) -- (1.4,2);
+
+%%%%%%%%%%%%%%%%%%%%%
+\node[draw=none] at (-2,5) {\bf \footnotesize Coverage Limit};
+\node[draw=none] at (-1.65,0.5) {\bf \footnotesize Deductible};
+\node[draw=none] at (10.5,3.5) {\bf \footnotesize Reinsurer};
+\node[draw=none] at (2.7,0.5) {\bfseries  \footnotesize \begin{tabular}{c} Loss retained by \\  the country \end{tabular}};
+\node[draw=none] at (2.7,5.5) {\bfseries \footnotesize \begin{tabular}{c} Loss retained by \\  the country \end{tabular}};
+\node[draw=none] at (2.7,3) {\bfseries \footnotesize \begin{tabular}{c} Re-/insurance \\  coverage \end{tabular}};
+\node[draw=none, xshift=-1.25cm] at (8,5.95) {\bf \footnotesize Country \#1};
+\node[draw=none, xshift=-1.25cm] at (8,1.5) {\bf \footnotesize Country \#1};
+
+%%%%%%%%%%%%%%%%%%%
+\draw [decorate,decoration={brace,amplitude=5pt,raise=0.5ex}]
+  (0,0) -- (0,1) node[midway,yshift=-3em]{};
+\draw [decorate,decoration={brace,amplitude=5pt,mirror,raise=0.5ex}]
+(1,0) -- (1,1) node[midway,yshift=-3em]{};
+\draw [decorate,decoration={brace,amplitude=5pt,mirror,raise=0.5ex}]
+(1,5) -- (1,6) node[midway,yshift=-3em]{};
+\draw [decorate,decoration={brace,amplitude=5pt,mirror,raise=0.5ex}]
+(1,1) -- (1,5) node[midway,yshift=-3em]{};
+\draw [decorate,decoration={brace,amplitude=5pt,mirror,raise=0.5ex}]
+(9,2) -- (9,5) node[midway,yshift=-3em]{};
+\draw [decorate,decoration={brace,amplitude=5pt,mirror,raise=0.5ex}]
+(9,2) -- (9,5) node[midway,yshift=-3em]{};
+\draw [decorate,decoration={brace,amplitude=5pt,raise=0.5ex}]
+(8,1) -- (8,2) node[midway,yshift=-3em]{};  
+\draw [decorate,decoration={brace,amplitude=5pt,raise=0.5ex}]
+(8,5.6) -- (8,6.3) node[midway,yshift=-3em]{};  
+\end{tikzpicture}

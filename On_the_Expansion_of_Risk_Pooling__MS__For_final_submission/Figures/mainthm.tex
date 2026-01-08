@@ -1,0 +1,64 @@
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = middle,
+    axis on top,
+    ylabel = {\Large $\rho_{n,n+1}$}, % Enlarged y-label
+    xlabel = {\Large $\sigma_{n+1}$}, % Enlarged x-label
+    ymin=-1.2,
+    ymax=1.2,
+    xmin=-1,
+    xmax=105,
+    legend style={font=\Large, at={(0.8,1.05)},anchor=north}, % Enlarged legend font
+    tick label style={font=\Large}, % Enlarged tick labels
+    width=\textwidth,
+    every axis x label/.style={
+        at={(ticklabel* cs:1.05)},
+        anchor=west,
+        font=\Large % Enlarged x-label
+    },
+    every axis y label/.style={
+        at={(ticklabel* cs:1.05)},
+        anchor=south,
+        font=\Large % Enlarged y-label
+    },
+]
+\addplot [
+    name path=A,
+    domain=0:150, 
+    samples=200, 
+    color=red,
+]
+{((2*20+1)*50^2-20^2*x^2)/(2*20^2*50*x)};
+\addplot [
+    name path=B,
+    domain=2:3.5, 
+    samples=100, 
+    color=blue,
+]
+{((20^2+2*20)*x^2-50^2)/(2*50*x)};
+\addplot [
+    name path=C,
+    dashed,
+    domain=0:200, 
+    samples=100, 
+    color=black,
+]
+{1};
+\addplot [
+    name path=D,
+    dashed,
+    domain=0:200, 
+    samples=100, 
+    color=black,
+]
+{-1};
+\addplot[yellow!10] fill between[of=A and D, soft clip={domain=2.5:102.5}];
+\node[draw=none,] at (25,-0.6) {\Huge (I)};
+\node[draw=none,] at (50,0.2) {\Huge (III)};
+\node[draw=none,] at (10,0.6) {\Huge (II)};
+\draw[->] (6,0.55) -- (1,0.1);
+
+\addlegendentry{Existing members}
+\addlegendentry{Candidate}
+\end{axis}
+\end{tikzpicture}
