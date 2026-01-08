@@ -4,11 +4,11 @@ On_the_Expansion_of_Risk_Pooling
 # Authors
 Michail Anthropelos, Runhuan Feng, Seongyoon Kim
 
-# Docker Workflow
+# Execution Workflow
 
 # Step 1: Primary Execution (Python Notebook)
 dockerfile: Dockerfile.python
-execution_order: first
+execution_order: 1
 required: true
 description: >
   This Dockerfile executes the main Jupyter notebook located at
@@ -21,7 +21,7 @@ notes: >
 
 # Step 2: Optional Execution (LaTeX Manuscript Compilation)
 dockerfile: Dockerfile.latex
-execution_order: second
+execution_order: 2
 optional: true
 description: >
   This Dockerfile compiles the LaTeX manuscript and E-companion PDFs.
@@ -29,6 +29,12 @@ description: >
 notes: >
   LaTeX files do not produce scientific results. PDFs are saved in 99_logs/.
   This step is only for manuscript preparation.
+
+# Dockerfile Naming Rules
+# - Dockerfile.python must exist and be used first
+# - Dockerfile.latex is optional and must be used second
+# - Do not leave any default 'Dockerfile' that contains only LaTeX instructions
+#   to avoid misinterpretation by automated systems.
 
 # Data
 included_files:
@@ -57,11 +63,12 @@ main_outputs:
   - executed_notebook.ipynb (from Dockerfile.python)
   - Figures 3-4 (manuscript)
   - Figures 2-11 (E-companion)
-  - 1Revisedmain.pdf
-  - 2Revised_E_companion.pdf
+  - 1Revisedmain.pdf (from Dockerfile.latex)
+  - 2Revised_E_companion.pdf (from Dockerfile.latex)
 
 # Important Notes
-- Dockerfile.python **must be run first**.
-- Dockerfile.latex is optional and **must be run after Python notebook**.
-- All outputs (executed notebook and PDFs) are saved to 99_logs/.
-- This ensures automated systems execute the primary analysis correctly.
+- **Dockerfile.python must always be run first.**
+- **Dockerfile.latex is optional and must only be run after the Python notebook.**
+- All outputs (executed notebook and PDFs) are saved to `99_logs/`.
+- Do **not leave any default Dockerfile** with only LaTeX commands; automated tools may pick it first.
+- This structure ensures automated systems execute the primary analysis correctly.
