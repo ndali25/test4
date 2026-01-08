@@ -1,123 +1,96 @@
-README
-
 Manuscript: On the Expansion of Risk Pooling
 Authors: Michail Anthropelos, Runhuan Feng, Seongyoon Kim
 
-1. Overview
+1. Purpose of This Repository
 
-This repository contains all data and code required to reproduce the results, figures, and tables in the manuscript On the Expansion of Risk Pooling and its E-companion. The main analyses are implemented in Python, with additional figures and tables generated via LaTeX and external tools where noted.
+This repository contains data, Python code, and LaTeX files used to reproduce the results of the manuscript On the Expansion of Risk Pooling and its E-companion.
 
-To reproduce the results, users should first review the data files, then run the provided Python notebook in order, and finally consult the manuscript and E-companion for figures and tables generated outside Python.
+⚠️ Important clarification
 
-2. Data Availability and Provenance
+Python code is used to generate numerical results and figures based on simulations and data.
 
-All data necessary to reproduce the results are included in this package.
+LaTeX files are used only to typeset the manuscript and figures, not to run simulations.
 
-Datasets Used
+The project is not a single executable pipeline.
 
-CCRIF Case Study
+Docker execution is optional and applies only to LaTeX compilation, not to Python analysis.
 
-CCRIF_TC.csv
+2. How to Reproduce the Results (Recommended Workflow)
+Step 1 — Run Python Code (Core Analysis)
 
-CCRIF_TC_Info.csv
+All simulations, numerical results, and most figures are generated using Python.
 
-Source: Caribbean Catastrophe Risk Insurance Facility (CCRIF), https://www.ccrif.org/
+Main file:
+Code_On_the_Expansion_of_Risk_Pooling.ipynb
 
-Notes: These datasets are trimmed and rescaled versions of the original CCRIF data.
+This notebook must be run top to bottom, in order, without skipping cells.
 
-Health-Share Case Study
-
-Health_data.xlsx
-
-Notes: Original payout-level data are proprietary. The provided dataset contains summary statistics, which are sufficient to reproduce all results in the paper.
-
-Some analyses rely on Monte Carlo simulations rather than empirical data. These simulations may generate minor numerical variation, but such differences are negligible and do not affect the conclusions.
-
-3. Variable Dictionaries
-Dataset: CCRIF_TC.csv
-
-Type: Type of disaster
-
-Name: Name of disaster
-
-Month: Month of occurrence
-
-Year: Year of occurrence
-
-Country: Country affected
-
-Payout: Total payout amount by CCRIF
-
-Dataset: CCRIF_TC_Info.csv
-
-Country: Country name
-
-GDP: Gross Domestic Product
-
-Area: Country area
-
-Occurrences: Number of payouts during the sample period
-
-Occurrence_Probability: Relative frequency of payouts
-
-Dataset: Health_data.xlsx
-
-Region: City or region name
-
-Count: Monthly number of payouts
-
-Mean_Compensation: Mean compensation amount
-
-Variance_Compensation: Variance of compensation
-
-sd: Standard deviation of compensation
-
-4. Computational Requirements
-
-Programming language: Python
-
-Required packages:
-numpy, pandas, matplotlib, scipy, math, random, tqdm
-
-Monte Carlo simulations are used, and random seeds are not fixed. Stability is achieved by averaging across simulations. Some simulations (e.g., Figure 3 in the manuscript) may take several minutes to run; total runtime should be under 30 minutes on standard hardware (e.g., Google Colab).
-
-5. Programs and Code Execution
-Main Code
-
-File: Code_On_the_Expansion_of_Risk_Pooling.ipynb
-
-The notebook should be run top to bottom, in order, without skipping cells.
-
-This notebook reproduces:
+It reproduces:
 
 Manuscript: Figures 3 and 4
 
 E-companion: Figures 2–11
 
-Other Figures and Tables
+⚠️ Monte Carlo simulations are used. Random seeds are not fixed; minor numerical variation is expected but does not affect conclusions.
+
+Step 2 — Compile LaTeX Files (Manuscript Only)
+
+LaTeX files are provided for document preparation, not for computational analysis.
+
+They can be compiled:
+
+locally (TeX Live / Overleaf), or
+
+optionally using Docker (see Section 6)
+
+Key LaTeX Outputs
 
 Manuscript
 
 Figure 1: CAT.tex
 
-Figure 2: LaTeX/TikZ (mainthm.tex, exit.tex), images in Figures/SC.png and Figures/WC.png
+Figure 2: TikZ figures (mainthm.tex, exit.tex)
 
-Tables 1–2: Code included in manuscript
+Tables 1–2: defined directly in the manuscript
 
-Figure 5: Figures/map_CCRIF_corrected.JPG (created externally)
-
-Figure 6: Figures/map_china.JPG (created externally)
-
-Tables 3–5: Code included in E-companion
+Figures 5–6: pre-generated image files
 
 E-Companion
 
-All figures and tables: Code included in the E-companion files
+All figures and tables: code included in the E-companion LaTeX files
 
-6. Notes
+3. Data Availability and Provenance
 
-All code uses relative paths and should run on any standard system.
+All data required to reproduce the results are included.
 
-Minor numerical differences due to simulation randomness are expected and do not affect results.
+Included Datasets
+File	Description	Source
+CCRIF_TC.csv	CCRIF disaster payouts	CCRIF (trimmed/rescaled)
+CCRIF_TC_Info.csv	Country-level CCRIF info	CCRIF
+Health_data.xlsx	Health-share summary statistics	Proprietary (aggregated)
 
-Code for appendix/E-companion results is included where available.
+Original CCRIF data can be accessed at https://www.ccrif.org/
+.
+
+4. Variable Dictionaries
+CCRIF_TC.csv
+
+Type, Name, Month, Year, Country, Payout
+
+CCRIF_TC_Info.csv
+
+Country, GDP, Area, Occurrences, Occurrence_Probability
+
+Health_data.xlsx
+
+Region, Count, Mean_Compensation, Variance_Compensation, sd
+
+5. Computational Requirements (Python)
+
+Language: Python 3
+
+Packages:
+numpy, pandas, matplotlib, scipy, math, random, tqdm
+
+Runtime:
+Some simulations may take several minutes; total runtime < 30 minutes on standard hardware.
