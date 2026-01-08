@@ -2,11 +2,12 @@ Project: On_the_Expansion_of_Risk_Pooling
 Authors: Michail Anthropelos, Runhuan Feng, Seongyoon Kim
 
 # Purpose
-Automatically execute the main Python notebook **headlessly** in a Docker container.
-Do NOT start an interactive Jupyter server.
+Automatically execute the main Python notebook **headlessly** and save outputs in /app/99_logs.
+Do NOT start any interactive Jupyter server.
 
-# Notebook to Run
-File: analysis/Code_On_the_Expansion_of_Risk_Pooling.ipynb
+# Notebook Execution Command
+Use the following command to run the notebook automatically:
+jupyter nbconvert --to notebook --execute analysis/Code_On_the_Expansion_of_Risk_Pooling.ipynb --output executed_notebook.ipynb --ExecutePreprocessor.timeout=600
 
 # Input Data
 - analysis/CCRIF_TC.csv
@@ -16,8 +17,8 @@ File: analysis/Code_On_the_Expansion_of_Risk_Pooling.ipynb
 # Output Folder
 - /app/99_logs/
 Contains:
-- executed_notebook.ipynb
-- generated figures and tables
+  - executed_notebook.ipynb
+  - generated figures and tables
 
 # Python Environment
 Base image: python:3.11-slim
@@ -32,9 +33,12 @@ Required Python packages:
 - nbconvert
 - openpyxl
 
-# Execution Instructions for Docker
-1. Set WORKDIR to `/app`.
-2. Copy all project files into `/app`.
-3. Install all Python dependencies.
-4. Create folder `/app/99_logs/` **before execution**.
-5. Run the notebook headlessly using:
+# Docker Instructions
+1. WORKDIR: /app
+2. COPY all project files into /app
+3. Install all dependencies
+4. Create /app/99_logs
+5. Execute the notebook using the command above
+6. Move executed notebook to /app/99_logs/
+7. Do NOT expose ports
+8. Do NOT start interactive Jupyter server
