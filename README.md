@@ -1,29 +1,24 @@
-Project: On_the_Expansion_of_Risk_Pooling
+ProjectName: On_the_Expansion_of_Risk_Pooling
 Authors: Michail Anthropelos, Runhuan Feng, Seongyoon Kim
 
-# Purpose
-Automatically execute the main Python notebook **headlessly** and save outputs in /app/99_logs.
-Do NOT start any interactive Jupyter server.
+ContainerType: python-headless
 
-# Notebook Execution Command
-Use the following command to run the notebook automatically:
-jupyter nbconvert --to notebook --execute analysis/Code_On_the_Expansion_of_Risk_Pooling.ipynb --output executed_notebook.ipynb --ExecutePreprocessor.timeout=600
+# Notebook execution
+ExecuteNotebook: analysis/Code_On_the_Expansion_of_Risk_Pooling.ipynb
+NotebookTimeout: 600
+OutputNotebookName: executed_notebook.ipynb
 
-# Input Data
+# Input data
+DataFiles:
 - analysis/CCRIF_TC.csv
 - analysis/CCRIF_TC_Info.csv
 - analysis/Health_data.xlsx
 
-# Output Folder
-- /app/99_logs/
-Contains:
-  - executed_notebook.ipynb
-  - generated figures and tables
+# Output folder
+OutputFolder: /app/99_logs
 
-# Python Environment
-Base image: python:3.11-slim
-
-Required Python packages:
+# Python packages to install
+PythonPackages:
 - numpy
 - pandas
 - matplotlib
@@ -33,12 +28,13 @@ Required Python packages:
 - nbconvert
 - openpyxl
 
-# Docker Instructions
-1. WORKDIR: /app
-2. COPY all project files into /app
-3. Install all dependencies
-4. Create /app/99_logs
-5. Execute the notebook using the command above
-6. Move executed notebook to /app/99_logs/
-7. Do NOT expose ports
-8. Do NOT start interactive Jupyter server
+# Instructions for generator
+# The Dockerfile should:
+# 1. Use python:3.11-slim
+# 2. Set WORKDIR to /app
+# 3. COPY all files
+# 4. Install listed PythonPackages
+# 5. Create OutputFolder
+# 6. Execute notebook headlessly using nbconvert with NotebookTimeout
+# 7. Move executed notebook to OutputFolder
+# 8. Do NOT start an interactive Jupyter server
