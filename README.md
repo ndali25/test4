@@ -3,8 +3,8 @@
 ## Project Metadata
 - **Project Name**: On_the_Expansion_of_Risk_Pooling
 - **Authors**: Michail Anthropelos, Runhuan Feng, Seongyoon Kim
-- **Container Type**: python-headless-autoexec
-- **Execution Mode**: Automatic notebook execution on container start (NO INTERACTIVE SERVER)
+- **Container Type**: python-jupyter
+- **Execution Mode**: Interactive Jupyter notebook server
 
 ## Docker Configuration
 
@@ -20,90 +20,72 @@ python:3.11-slim
 
 ## Dependencies
 
-### CRITICAL: Install ALL Python Packages
+### Python Packages (Install via pip)
 ```
-numpy
+notebook
 pandas
-matplotlib
-scipy
-tqdm
-jupyter
-nbconvert
 openpyxl
+matplotlib
+numpy
+scipy
 ```
 
-**Installation Command**: `pip install --no-cache-dir numpy pandas matplotlib scipy tqdm jupyter nbconvert openpyxl`
+**Installation Command**: `pip install --no-cache-dir notebook pandas openpyxl matplotlib numpy scipy`
 
-## Project Files to Copy
+## Project Files
 
-### COPY ALL files from project root to /app
+### Copy all project files
 ```
 COPY . /app
 ```
 
-### Required Input Files (must exist in container)
+### Main Notebook File
 ```
-analysis/CCRIF_TC.csv
-analysis/CCRIF_TC_Info.csv
-analysis/Health_data.xlsx
-analysis/Code_On_the_Expansion_of_Risk_Pooling.ipynb
-```
-
-## Build Steps (RUN commands)
-
-### Step 1: Install all Python packages
-```bash
-RUN pip install --no-cache-dir numpy pandas matplotlib scipy tqdm jupyter nbconvert openpyxl
-```
-
-### Step 2: Create output directory
-```bash
-RUN mkdir -p /app/99_logs
+On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb
 ```
 
 ## Runtime Configuration
 
-### DO NOT EXPOSE ANY PORTS
-**No EXPOSE directive required** - This is headless execution, not a Jupyter server
-
-### DO NOT START JUPYTER SERVER
-**CRITICAL**: Do not use `jupyter notebook` command
-
-### CMD Directive (Container Entry Point)
-**Use this exact command to auto-execute the notebook on container start:**
-```bash
-CMD ["jupyter", "nbconvert", "--to", "notebook", "--execute", "analysis/Code_On_the_Expansion_of_Risk_Pooling.ipynb", "--output", "/app/99_logs/executed_notebook.ipynb", "--ExecutePreprocessor.timeout=600"]
+### Port Exposure
+```
+EXPOSE 8888
 ```
 
-## Execution Specifications
-- **Execution Method**: nbconvert with --execute flag
-- **Input Notebook**: analysis/Code_On_the_Expansion_of_Risk_Pooling.ipynb
-- **Output Notebook**: /app/99_logs/executed_notebook.ipynb
-- **Timeout**: 600 seconds
-- **Auto-Run**: YES - executes immediately when container starts
-- **Interactive Mode**: NO - container exits after execution completes
+### Startup Command
+```bash
+CMD ["jupyter", "notebook", "On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
+```
 
-## CRITICAL INSTRUCTIONS FOR DOCKERFILE GENERATION
+## Build Instructions for AI
 
-**MUST DO:**
-1. Use `python:3.11-slim` as base image
+1. Use base image: `python:3.11-slim`
 2. Set WORKDIR to `/app`
 3. COPY all project files to `/app`
-4. RUN `pip install` with ALL packages: numpy pandas matplotlib scipy tqdm jupyter nbconvert openpyxl
-5. RUN `mkdir -p /app/99_logs` to create output directory
-6. Use CMD with `jupyter nbconvert --to notebook --execute` to run notebook
-7. Set timeout to 600 seconds in nbconvert command
-8. Output to `/app/99_logs/executed_notebook.ipynb`
+4. Install Python packages: `notebook pandas openpyxl matplotlib numpy scipy`
+5. EXPOSE port 8888
+6. Set CMD to start Jupyter notebook server with the specific notebook file
 
-**MUST NOT DO:**
-1. DO NOT use EXPOSE directive
-2. DO NOT start Jupyter server with `jupyter notebook`
-3. DO NOT use interactive mode
-4. DO NOT forget any Python packages (especially scipy, tqdm, nbconvert)
-5. DO NOT use port 8888 or any port
+## Running the Container
 
-## Expected Container Behavior
-1. Container starts
-2. Automatically executes notebook using nbconvert
-3. Saves executed notebook to /app/99_logs/
-4. Container exits after completion
+**Build the image:**
+```bash
+docker build -t risk-pooling .
+```
+
+**Run the container with port mapping:**
+```bash
+docker run -p 8888:8888 risk-pooling
+```
+
+**Access Jupyter in browser:**
+```
+http://localhost:8888/tree?token=<token-from-console>
+```
+
+## Execution Details
+- **Server Type**: Jupyter Notebook
+- **Port**: 8888 (must be mapped with -p 8888:8888)
+- **IP Binding**: 0.0.0.0 (accessible from outside container)
+- **Browser**: Disabled (--no-browser)
+- **Root Access**: Allowed (--allow-root)
+- **Direct Notebook**: Opens specific notebook file on startup
