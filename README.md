@@ -3,45 +3,48 @@
 ## Project Metadata
 - **Project Name**: On_the_Expansion_of_Risk_Pooling
 - **Authors**: Michail Anthropelos, Runhuan Feng, Seongyoon Kim
+- **Execution Type**: Automatic Headless Execution
 
-## CRITICAL: Exact Dockerfile Requirements
+## CRITICAL: Dockerfile Must Auto-Execute Notebook
 
-### MANDATORY Base Image
+This container must AUTOMATICALLY EXECUTE the Jupyter notebook on startup and then exit.
+**DO NOT start an interactive Jupyter server.**
+
+## MANDATORY Dockerfile Structure
+
+### Base Image
 ```
 FROM python:3.11-slim
 ```
-**DO NOT use jupyter/minimal-notebook or any other base image**
 
-### MANDATORY Working Directory
+### Working Directory
 ```
 WORKDIR /app
 ```
-**DO NOT use /home/jovyan/work or any other directory**
 
-### MANDATORY Copy Command
+### Copy All Files
 ```
 COPY . /app
 ```
 
-### MANDATORY Package Installation
+### Install ALL Required Packages
 ```
-RUN pip install --no-cache-dir notebook pandas openpyxl matplotlib numpy scipy
-```
-**Install exactly these packages in this order: notebook pandas openpyxl matplotlib numpy scipy**
-
-### MANDATORY Port Exposure
-```
-EXPOSE 8888
+RUN pip install --no-cache-dir notebook pandas openpyxl matplotlib numpy scipy nbconvert
 ```
 
-### MANDATORY Startup Command
+**CRITICAL: Must install nbconvert for headless execution**
+
+### Create Output Directory
 ```
-CMD ["jupyter", "notebook", "On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
+RUN mkdir -p /app/outputs
 ```
 
-## Complete Dockerfile Structure
+### Automatic Execution Command
+```
+CMD ["jupyter", "nbconvert", "--to", "notebook", "--execute", "On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb", "--output", "/app/outputs/executed_notebook.ipynb", "--ExecutePreprocessor.timeout=600"]
+```
 
-The Dockerfile MUST follow this EXACT structure:
+## Complete Dockerfile (EXACT FORMAT REQUIRED)
 ```dockerfile
 FROM python:3.11-slim
 
@@ -49,41 +52,65 @@ WORKDIR /app
 
 COPY . /app
 
-RUN pip install --no-cache-dir notebook pandas openpyxl matplotlib numpy scipy
+RUN pip install --no-cache-dir notebook pandas openpyxl matplotlib numpy scipy nbconvert
 
-EXPOSE 8888
+RUN mkdir -p /app/outputs
 
-CMD ["jupyter", "notebook", "On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
+CMD ["jupyter", "nbconvert", "--to", "notebook", "--execute", "On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb", "--output", "/app/outputs/executed_notebook.ipynb", "--ExecutePreprocessor.timeout=600"]
 ```
 
-## Forbidden Instructions
+## Required Python Packages
+1. notebook - Jupyter notebook infrastructure
+2. pandas - Data manipulation
+3. openpyxl - Excel file support
+4. matplotlib - Plotting
+5. numpy - Numerical computing
+6. scipy - Scientific computing
+7. nbconvert - **CRITICAL for headless notebook execution**
 
-**DO NOT:**
-- Use jupyter/minimal-notebook as base image
-- Use any USER commands
-- Use chown or permission commands
-- Use start-notebook.sh
-- Use /home/jovyan directory
-- Change the working directory from /app
-- Modify the CMD command format
-- Skip any of the required packages
-
-## Required Packages
-1. notebook
-2. pandas
-3. openpyxl
-4. matplotlib
-5. numpy
-6. scipy
-
-## Notebook Path
+## Input Notebook
 ```
 On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb
 ```
 
-## Execution Configuration
-- Port: 8888
-- IP: 0.0.0.0
-- No browser launch
-- Allow root access
-- Direct notebook opening
+## Output Configuration
+- **Output Directory**: /app/outputs
+- **Output File**: executed_notebook.ipynb
+- **Execution Timeout**: 600 seconds
+
+## Execution Behavior
+1. Container starts
+2. Automatically executes the notebook using nbconvert
+3. Saves executed notebook with all outputs to /app/outputs/
+4. Container exits after completion
+
+## Forbidden Elements
+
+**DO NOT include:**
+- EXPOSE directives (no ports needed)
+- Interactive Jupyter server commands
+- `jupyter notebook` command (use `jupyter nbconvert` instead)
+- USER or permission commands
+- start-notebook.sh scripts
+
+## How to Run
+
+**Build:**
+```bash
+docker build -t risk-pooling-exec .
+```
+
+**Run (outputs will be in container):**
+```bash
+docker run --name risk-pooling-run risk-pooling-exec
+```
+
+**Copy outputs to host:**
+```bash
+docker cp risk-pooling-run:/app/outputs/executed_notebook.ipynb ./
+```
+
+**Or run with volume mount:**
+```bash
+docker run -v $(pwd)/outputs:/app/outputs risk-pooling-exec
+```
