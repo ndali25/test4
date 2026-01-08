@@ -4,40 +4,31 @@ On_the_Expansion_of_Risk_Pooling
 # Authors
 Michail Anthropelos, Runhuan Feng, Seongyoon Kim
 
-# Execution Workflow
+# Docker Workflow
 
 # Step 1: Primary Execution (Python Notebook)
-language: python
-entry_point: Data/Data/Code_On_the_Expansion_of_Risk_Pooling.ipynb
+dockerfile: Dockerfile.python
 execution_order: first
 required: true
 description: >
-  This Jupyter notebook generates all figures, tables, and numerical results 
-  used in the manuscript and E-companion. It must be executed **before any 
-  LaTeX compilation**.
+  This Dockerfile executes the main Jupyter notebook located at
+  Data/Data/Code_On_the_Expansion_of_Risk_Pooling.ipynb.
+  It generates all figures, tables, and numerical results used in the manuscript
+  and E-companion. Outputs are saved in 99_logs/.
 notes: >
-  Monte Carlo simulations are used. Random seeds are not fixed, so small 
-  variations in results are expected but do not affect the main conclusions.
+  Monte Carlo simulations are used. Random seeds are not fixed, so minor
+  variations are expected but do not affect conclusions.
 
-# Step 2: Optional Execution (LaTeX Manuscript)
-language: latex
-files:
-  - On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/1Revisedmain.tex
-  - On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/2Revised_E_companion.tex
-purpose: Documentation / manuscript preparation only
+# Step 2: Optional Execution (LaTeX Manuscript Compilation)
+dockerfile: Dockerfile.latex
+execution_order: second
 optional: true
+description: >
+  This Dockerfile compiles the LaTeX manuscript and E-companion PDFs.
+  It requires that the Python notebook has been executed first.
 notes: >
-  LaTeX files do not produce scientific results. Can be compiled locally or
-  using Docker if desired. Must **not** be interpreted as the main workflow.
-
-# Step 3: Optional Docker
-files:
-  - Dockerfile.LaTeX
-purpose: Optional, LaTeX-only compilation
-optional: true
-notes: >
-  Docker is only required if you want to compile the LaTeX manuscript. Python 
-  notebook execution remains the primary workflow.
+  LaTeX files do not produce scientific results. PDFs are saved in 99_logs/.
+  This step is only for manuscript preparation.
 
 # Data
 included_files:
@@ -63,11 +54,14 @@ notes: "Runtime < 30 minutes on standard hardware. No fixed random seed for Mont
 
 # Output
 main_outputs:
+  - executed_notebook.ipynb (from Dockerfile.python)
   - Figures 3-4 (manuscript)
   - Figures 2-11 (E-companion)
-other_outputs: "Other figures and tables are either pre-generated or included in manuscript/E-companion LaTeX."
+  - 1Revisedmain.pdf
+  - 2Revised_E_companion.pdf
 
 # Important Notes
-- Python notebook **must be executed first**.
-- LaTeX is optional and **must not be interpreted as primary execution**.
-- Docker is optional and only for LaTeX compilation.
+- Dockerfile.python **must be run first**.
+- Dockerfile.latex is optional and **must be run after Python notebook**.
+- All outputs (executed notebook and PDFs) are saved to 99_logs/.
+- This ensures automated systems execute the primary analysis correctly.
