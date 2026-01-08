@@ -8,7 +8,7 @@ Michail Anthropelos, Runhuan Feng, Seongyoon Kim
 
 # Step 1: Primary Execution (Python)
 language: python
-entry_point: Code_On_the_Expansion_of_Risk_Pooling.ipynb
+entry_point: Data/Data/Code_On_the_Expansion_of_Risk_Pooling.ipynb
 execution_order: top-to-bottom
 required: true
 description: >
