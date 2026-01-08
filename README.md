@@ -2,10 +2,8 @@ Project: On_the_Expansion_of_Risk_Pooling
 Authors: Michail Anthropelos, Runhuan Feng, Seongyoon Kim
 
 # Purpose
-Automatically execute the main Python notebook and save outputs.
-Do not start a Jupyter server.
-Do not run LaTeX.
-Headless, fully automated.
+Automatically execute the main Python notebook **headlessly** and save outputs.
+Do NOT start a Jupyter server or open any browser.
 
 # Input Notebook
 analysis/Code_On_the_Expansion_of_Risk_Pooling.ipynb
@@ -17,7 +15,7 @@ analysis/Health_data.xlsx
 
 # Output Folder
 99_logs/
-Contains: executed_notebook.ipynb, generated figures, tables
+Contains: executed_notebook.ipynb, figures, tables
 
 # Python Environment
 Base image: python:3.11-slim
@@ -34,20 +32,10 @@ Required packages:
 # Dockerfile Instructions
 1. WORKDIR /app
 2. COPY all files into /app
-3. Install required Python packages using pip
-4. Create folder /app/99_logs
-5. CMD: Execute notebook automatically using nbconvert:
-   jupyter nbconvert --to notebook --execute analysis/Code_On_the_Expansion_of_Risk_Pooling.ipynb --output executed_notebook.ipynb
-   Move executed_notebook.ipynb to /app/99_logs/
+3. Install all required Python packages
+4. Create /app/99_logs folder
+5. CMD: **headless execution only**:
+   `jupyter nbconvert --to notebook --execute analysis/Code_On_the_Expansion_of_Risk_Pooling.ipynb --output executed_notebook.ipynb --ExecutePreprocessor.timeout=600`
+   Move `executed_notebook.ipynb` to `/app/99_logs/`
 6. Do NOT expose ports
-7. Do NOT start interactive Jupyter server
-
-# Build Docker Image
-docker build -t test4-python -f Dockerfile.python .
-
-# Run Container
-docker run --rm -v "$(pwd)/99_logs:/app/99_logs" test4-python
-
-# Check Outputs
-ls 99_logs/
-# Should contain executed_notebook.ipynb and all figures/tables
+7. Do NOT start interactive server
