@@ -1,48 +1,45 @@
-# Project Name
+# Project
 On_the_Expansion_of_Risk_Pooling
 
 # Authors
 Michail Anthropelos, Runhuan Feng, Seongyoon Kim
 
 # Purpose
-This README is dedicated to executing the Python notebook only. 
-The notebook generates all figures, tables, and results used in 
-the manuscript and E-companion. LaTeX compilation is explicitly excluded.
+This README specifies an automated workflow for executing the Python notebook 
+that generates all results for the manuscript and E-companion. 
+No LaTeX compilation or browser interaction is included.
 
-# Project Structure
-analysis/: Folder containing:
-  - Code_On_the_Expansion_of_Risk_Pooling.ipynb (main notebook)
-  - CCRIF_TC.csv
-  - CCRIF_TC_Info.csv
-  - Health_data.xlsx
-99_logs/: Output folder (created automatically if not present)
+# Required Files
+analysis/Code_On_the_Expansion_of_Risk_Pooling.ipynb
+analysis/CCRIF_TC.csv
+analysis/CCRIF_TC_Info.csv
+analysis/Health_data.xlsx
 
-# Execution Workflow
-1. Build the Docker image
-   - Dockerfile: Dockerfile.python
-   - Command: 
-       docker build -t test4-python -f Dockerfile.python .
+# Output Folder
+All outputs (executed notebook, figures, tables) are stored in 99_logs/
 
-2. Run the container to execute the notebook automatically
-   - Command:
-       docker run --rm -v "$(pwd)/99_logs:/app/99_logs" --name rtest4-run test4-python
-   - Outputs:
-       - executed_notebook.ipynb
-       - Generated figures and tables
-     stored in `99_logs/`
+# Dockerfile Instructions
+1. Base image: python:3.11-slim
+2. Working directory: /app
+3. Copy all files into container
+4. Install Python packages: numpy, pandas, matplotlib, scipy, tqdm, jupyter, nbconvert
+5. Create folder /app/99_logs
+6. Command to run automatically when container starts:
+   - Execute notebook:
+       jupyter nbconvert --to notebook --execute analysis/Code_On_the_Expansion_of_Risk_Pooling.ipynb
+   - Save output as executed_notebook.ipynb in /app/99_logs/
 
-# Data Provenance
-- CCRIF_TC.csv: Trimmed/rescaled from CCRIF. Original: https://www.ccrif.org/
-- CCRIF_TC_Info.csv: Trimmed/rescaled from CCRIF. Original: https://www.ccrif.org/
-- Health_data.xlsx: Summary statistics only; proprietary payouts not included.
+# Build Docker Image
+docker build -t test4-python -f Dockerfile.python .
 
-# Computational Requirements
-- Language: Python 3.11
-- Required packages: numpy, pandas, matplotlib, scipy, tqdm, jupyter, nbconvert
-- Runtime: < 30 minutes on standard hardware
-- Notes: Monte Carlo simulations may produce minor variations
+# Run Container (automatic notebook execution)
+docker run --rm -v "$(pwd)/99_logs:/app/99_logs" --name rtest4-run test4-python
+
+# Check Results
+ls 99_logs/
+# Should contain executed_notebook.ipynb and any generated figures/tables
 
 # Notes
-- LaTeX compilation is not included in this workflow.
-- All outputs are stored in `99_logs/`.
-- The notebook runs automatically when the Docker container starts.
+- Monte Carlo simulations may produce minor variations in results.
+- This workflow is fully automated and headless (no interactive browser needed).
+- LaTeX compilation is not included.
