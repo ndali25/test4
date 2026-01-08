@@ -4,11 +4,38 @@ On_the_Expansion_of_Risk_Pooling
 # Authors
 Michail Anthropelos, Runhuan Feng, Seongyoon Kim
 
-# Main Execution
+# Execution Workflow
+
+# Step 1: Primary Execution (Python)
 language: python
 entry_point: Code_On_the_Expansion_of_Risk_Pooling.ipynb
 execution_order: top-to-bottom
-notes: "Run all cells sequentially. This notebook generates all main figures and results."
+required: true
+description: >
+  This notebook generates all figures and numerical results for the manuscript
+  and E-companion. Must be executed fully before any LaTeX compilation.
+notes: >
+  Monte Carlo simulations are used. Random seeds are not fixed. Minor variation
+  is expected but does not affect conclusions.
+
+# Step 2: Optional Execution (LaTeX)
+language: latex
+files:
+  - On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/1Revisedmain.tex
+  - On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/2Revised_E_companion.tex
+purpose: Documentation / manuscript preparation only
+optional: true
+notes: >
+  LaTeX files do not produce scientific results. Can be compiled locally or
+  using Docker if desired.
+
+# Step 3: Optional Docker
+files:
+  - Dockerfile.LaTeX
+purpose: Optional, LaTeX-only compilation
+optional: true
+notes: >
+  Docker must not be used for main analysis. Python notebook is the primary workflow.
 
 # Data
 included_files:
@@ -30,29 +57,15 @@ packages:
   - math
   - random
   - tqdm
-notes: "Monte Carlo simulations used; random seeds not fixed. Runtime < 30 minutes."
-
-# LaTeX / Manuscript
-language: latex
-files:
-  - On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/1Revisedmain.tex
-  - On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/2Revised_E_companion.tex
-purpose: "Document preparation only; does not produce scientific results."
-optional: true
-
-# Docker
-files:
-  - Dockerfile.LaTeX
-purpose: "Optional, LaTeX-only compilation. Not required for main execution."
-optional: true
+notes: "Runtime < 30 minutes on standard hardware."
 
 # Output
 main_outputs:
   - Figures 3-4 (manuscript)
   - Figures 2-11 (E-companion)
-notes: "Other figures/tables are either pre-generated or included in manuscript/E-companion LaTeX."
+other_outputs: "Other figures and tables are either pre-generated or included in manuscript/E-companion LaTeX."
 
 # Important Notes
-- "Do not execute LaTeX or Docker to reproduce results."
-- "Python notebook is the primary workflow."
-- "Dockerfile.LaTeX exists only for optional compilation."
+- Python notebook must be executed **first**.
+- LaTeX is optional and **must not be interpreted as primary execution**.
+- Docker is optional and only for LaTeX compilation.
