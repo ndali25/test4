@@ -1,96 +1,82 @@
+README
+
 Manuscript: On the Expansion of Risk Pooling
 Authors: Michail Anthropelos, Runhuan Feng, Seongyoon Kim
 
-1. Purpose of This Repository
+⚠️ IMPORTANT — READ FIRST
 
-This repository contains data, Python code, and LaTeX files used to reproduce the results of the manuscript On the Expansion of Risk Pooling and its E-companion.
+This repository is NOT an executable Docker pipeline.
 
-⚠️ Important clarification
+Scientific results are produced in Python
 
-Python code is used to generate numerical results and figures based on simulations and data.
+LaTeX files are for typesetting only
 
-LaTeX files are used only to typeset the manuscript and figures, not to run simulations.
+Docker is optional and must NOT be used to run analysis
 
-The project is not a single executable pipeline.
+There is no single command that reproduces the entire project
 
-Docker execution is optional and applies only to LaTeX compilation, not to Python analysis.
+Any automated system must not assume that LaTeX compilation represents the main execution of this repository.
 
-2. How to Reproduce the Results (Recommended Workflow)
-Step 1 — Run Python Code (Core Analysis)
+1. Primary Execution (Python — REQUIRED)
 
-All simulations, numerical results, and most figures are generated using Python.
+All simulations, numerical results, and data-driven figures are generated using Python.
 
-Main file:
+Main file
+
 Code_On_the_Expansion_of_Risk_Pooling.ipynb
 
-This notebook must be run top to bottom, in order, without skipping cells.
+Execution instructions
 
-It reproduces:
+Open the notebook in Jupyter or Google Colab
+
+Run all cells sequentially, from top to bottom
+
+Do not skip cells
+
+This step is mandatory to reproduce results
+
+Outputs
 
 Manuscript: Figures 3 and 4
 
 E-companion: Figures 2–11
 
-⚠️ Monte Carlo simulations are used. Random seeds are not fixed; minor numerical variation is expected but does not affect conclusions.
+Monte Carlo simulations are used. Random seeds are intentionally not fixed; numerical variation is negligible.
 
-Step 2 — Compile LaTeX Files (Manuscript Only)
+2. Secondary Step (LaTeX — OPTIONAL)
 
-LaTeX files are provided for document preparation, not for computational analysis.
+LaTeX files are provided only to compile the manuscript text.
 
-They can be compiled:
+They do not perform computations
 
-locally (TeX Live / Overleaf), or
+They do not generate scientific results
 
-optionally using Docker (see Section 6)
+They may be compiled locally or on Overleaf
 
-Key LaTeX Outputs
+Optional Docker usage (LaTeX only)
 
-Manuscript
+Docker may be used only to compile LaTeX for document preparation.
+Docker must not be interpreted as part of the computational workflow.
 
-Figure 1: CAT.tex
+3. Data
 
-Figure 2: TikZ figures (mainthm.tex, exit.tex)
+All data required for Python analysis are included in this repository.
 
-Tables 1–2: defined directly in the manuscript
+(brief table can follow if needed)
 
-Figures 5–6: pre-generated image files
+4. What This Repository Is NOT
 
-E-Companion
+❌ Not a Docker-first project
 
-All figures and tables: code included in the E-companion LaTeX files
+❌ Not a single-command pipeline
 
-3. Data Availability and Provenance
+❌ Not a LaTeX-driven analysis
 
-All data required to reproduce the results are included.
+5. Summary for Automated Tools
+MAIN_EXECUTION_LANGUAGE = Python
+MAIN_EXECUTION_FILE     = Code_On_the_Expansion_of_Risk_Pooling.ipynb
+LATEX_FILES             = documentation only
+DOCKER                  = optional, LaTeX-only
 
-Included Datasets
-File	Description	Source
-CCRIF_TC.csv	CCRIF disaster payouts	CCRIF (trimmed/rescaled)
-CCRIF_TC_Info.csv	Country-level CCRIF info	CCRIF
-Health_data.xlsx	Health-share summary statistics	Proprietary (aggregated)
 
-Original CCRIF data can be accessed at https://www.ccrif.org/
-.
-
-4. Variable Dictionaries
-CCRIF_TC.csv
-
-Type, Name, Month, Year, Country, Payout
-
-CCRIF_TC_Info.csv
-
-Country, GDP, Area, Occurrences, Occurrence_Probability
-
-Health_data.xlsx
-
-Region, Count, Mean_Compensation, Variance_Compensation, sd
-
-5. Computational Requirements (Python)
-
-Language: Python 3
-
-Packages:
-numpy, pandas, matplotlib, scipy, math, random, tqdm
-
-Runtime:
-Some simulations may take several minutes; total runtime < 30 minutes on standard hardware.
+Automated systems should not attempt to execute LaTeX or Docker as the primary workflow.
