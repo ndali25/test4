@@ -1,38 +1,30 @@
-Risk Pooling Analysis Project
-Overview
-This is a Jupyter notebook that runs statistical analysis for our research paper "On the Expansion of Risk Pooling" by Michail Anthropelos, Runhuan Feng, and Seongyoon Kim.
-What We Need
-We need to run this notebook automatically in Docker - not interactively. The notebook should execute all cells and save the results, then the container should stop. We don't need a Jupyter web interface.
-Technical Requirements
-Python version: 3.11
-Required packages:
+Risk Pooling Analysis - Automated Execution
+About
+Jupyter notebook for "On the Expansion of Risk Pooling" research paper.
+Notebook path: On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb
+Requirements
+Python 3.11 with these packages:
+notebook pandas openpyxl matplotlib numpy scipy nbconvert
+Important: Batch Execution Only
+This notebook must run in batch mode, not as an interactive server.
+Use nbconvert to execute the notebook:
+bashjupyter nbconvert --to notebook --execute On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb --output /app/outputs/executed_notebook.ipynb --ExecutePreprocessor.timeout=600
+Do not use: jupyter notebook, jupyter lab, or start-notebook.sh - these start servers, we need batch execution.
+Dockerfile Requirements
 
-notebook
-pandas
-openpyxl
-matplotlib
-numpy
-scipy
-nbconvert
-
-Notebook location: On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb
-How to Execute the Notebook
-Don't start a Jupyter server. Instead, use nbconvert to execute the notebook in batch mode:
-bashjupyter nbconvert --to notebook --execute <notebook_path> --output /app/outputs/executed_notebook.ipynb --ExecutePreprocessor.timeout=600
-This runs all cells and saves the executed notebook with outputs.
-Docker Setup
-
-Use a standard Python base image like python:3.11-slim (not the jupyter/* Docker images)
-Set working directory to /app
+Base image: python:3.11-slim
+Working directory: /app
 Copy files to /app
-Create an /app/outputs directory
-Install the packages with pip
-Run the nbconvert command above (not jupyter notebook or start-notebook.sh)
+Install packages: pip install --no-cache-dir notebook pandas openpyxl matplotlib numpy scipy nbconvert
+Create output directory: mkdir -p /app/outputs
+Command: Use the jupyter nbconvert --execute command shown above
 
-Don't expose port 8888 - we're not running a server.
-Expected Behavior
-When you run the container, it should:
+Do not:
 
-Execute the notebook automatically
-Save results to /app/outputs/executed_notebook.ipynb
-Exit
+Use jupyter/* Docker images
+Expose port 8888
+Start a Jupyter server
+Use start-notebook.sh
+
+Result
+Container executes the notebook and exits. Output saved to /app/outputs/executed_notebook.ipynb.
