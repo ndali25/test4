@@ -1,30 +1,40 @@
-Risk Pooling Analysis - Automated Execution
-About
-Jupyter notebook for "On the Expansion of Risk Pooling" research paper.
-Notebook path: On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb
+Risk Pooling Analysis - Interactive Jupyter Notebook
+Project Overview
+Research notebook for "On the Expansion of Risk Pooling" by Michail Anthropelos, Runhuan Feng, and Seongyoon Kim.
+Notebook location: On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb
 Requirements
-Python 3.11 with these packages:
-notebook pandas openpyxl matplotlib numpy scipy nbconvert
-Important: Batch Execution Only
-This notebook must run in batch mode, not as an interactive server.
-Use nbconvert to execute the notebook:
-bashjupyter nbconvert --to notebook --execute On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb --output /app/outputs/executed_notebook.ipynb --ExecutePreprocessor.timeout=600
-Do not use: jupyter notebook, jupyter lab, or start-notebook.sh - these start servers, we need batch execution.
-Dockerfile Requirements
 
-Base image: python:3.11-slim
-Working directory: /app
-Copy files to /app
-Install packages: pip install --no-cache-dir notebook pandas openpyxl matplotlib numpy scipy nbconvert
-Create output directory: mkdir -p /app/outputs
-Command: Use the jupyter nbconvert --execute command shown above
+Python 3.11
+Jupyter notebook server
+Required packages: pandas, openpyxl, matplotlib, numpy, scipy, notebook
 
-Do not:
+Docker Setup
+We need an interactive Jupyter notebook environment accessible via web browser.
+Configuration
+Base image: Use jupyter/scipy-notebook:python-3.11 or similar Jupyter Docker stack
+Working directory: /home/jovyan/work
+Port: Expose port 8888 for Jupyter server
+Packages: Install additional packages if needed:
+bashpip install openpyxl
+Startup
+Start the Jupyter notebook server with:
 
-Use jupyter/* Docker images
-Expose port 8888
-Start a Jupyter server
-Use start-notebook.sh
+No authentication token (for easy access)
+Listen on all interfaces (0.0.0.0)
+Allow root if needed
 
-Result
-Container executes the notebook and exits. Output saved to /app/outputs/executed_notebook.ipynb.
+Use start-notebook.sh or jupyter notebook command.
+Running the Container
+Build:
+bashdocker build -t risk-pooling .
+Run:
+bashdocker run -p 8888:8888 -v $(pwd):/home/jovyan/work risk-pooling
+Access Jupyter at: http://localhost:8888
+Usage
+
+Start the container
+Open your browser to http://localhost:8888
+Navigate to the notebook file
+Run cells interactively
+
+The container should keep running so you can work with the notebook through your browser.
