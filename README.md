@@ -1,32 +1,23 @@
-# Risk Pooling Experiments
+# Risk Pooling - Batch Execution
 
-This repository contains code and experiments related to risk pooling models.
+This project contains a Jupyter notebook to perform risk pooling analysis.
 
-## Contents
+## Environment Requirements
 
-- One or more Jupyter notebooks
-- Python scripts used for numerical experiments
-- Figures generated from simulations
+- Python 3.11
+- Required Python packages: numpy, pandas, matplotlib, scipy, openpyxl, notebook
 
-## Environment
+## Usage
 
-The code runs with Python.
+The notebook is meant to be **executed automatically** without manual interaction.
 
-Some experiments use common scientific Python libraries such as:
-- numpy
-- scipy
-- pandas
-- matplotlib
+To run the notebook and save the executed version, use:
 
-## How it is used
 
-The experiments are usually run by executing the notebooks.
-Sometimes results are generated automatically, and sometimes the notebooks are explored manually.
+## Docker Notes
 
-The environment should be reproducible and easy to run on different machines.
+- The container should run this command automatically on startup.
+- No need for Jupyter server or web access.
+- No ports need to be exposed.
 
-## Notes
 
-- The project was developed in different environments.
-- Some notebooks may rely on features available in interactive environments.
-- No strict assumptions are made about how the code is launched.
