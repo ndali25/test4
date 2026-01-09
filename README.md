@@ -1,92 +1,50 @@
-# On_the_Expansion_of_Risk_Pooling
+Risk Pooling Analysis - Jupyter Notebook Automation
+Project Overview
+This project contains the computational analysis for the research paper "On the Expansion of Risk Pooling" by Michail Anthropelos, Runhuan Feng, and Seongyoon Kim. The analysis is implemented in a Jupyter notebook that performs statistical computations and generates visualizations.
+Project Structure
+On_the_Expansion_of_Risk_Pooling/
+├── On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/
+│   └── Code_On_the_Expansion_of_Risk_Pooling.ipynb
+└── README.md
+Requirements
+The notebook requires Python 3.11 and depends on the following packages:
 
-## DOCKERFILE GENERATION INSTRUCTIONS
+pandas - for data manipulation and Excel file processing
+openpyxl - required by pandas to read .xlsx files
+numpy - for numerical computations
+scipy - for statistical analysis
+matplotlib - for creating plots and visualizations
+notebook - Jupyter notebook environment
+nbconvert - for programmatic notebook execution
 
-### STEP 1: Base Image Line
-```
-FROM python:3.11-slim
-```
-**RULE: Use ONLY python:3.11-slim. Do NOT use jupyter/minimal-notebook.**
+Execution Requirements
+We need to run this notebook in an automated, non-interactive mode as part of a batch processing pipeline. The notebook should execute completely without user intervention, and all outputs (including plots and data) should be saved automatically.
+Execution Specifications:
 
-### STEP 2: Working Directory Line
-```
-WORKDIR /app
-```
-**RULE: Use ONLY /app. Do NOT use /home/jovyan/work.**
+The notebook is located at: On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb
+Execution should be headless (no browser interface needed)
+The executed notebook with all outputs should be saved to an outputs directory
+Some cells may take time to complete, so a timeout of at least 600 seconds per cell is recommended
+No interactive Jupyter server should remain running after execution
 
-### STEP 3: Copy Files Line
-```
-COPY . /app
-```
+Deployment Notes
+This needs to be containerized for reproducible execution across different environments. The container should:
 
-### STEP 4: Install Packages Line
-```
-RUN pip install --no-cache-dir notebook pandas openpyxl matplotlib numpy scipy nbconvert
-```
-**RULE: Install these exact packages: notebook pandas openpyxl matplotlib numpy scipy nbconvert**
+Start up with Python 3.11
+Have all the required packages installed
+Execute the notebook automatically when the container runs
+Save the executed notebook with all outputs to a dedicated output folder
+Exit cleanly after execution completes
 
-### STEP 5: Create Output Directory Line
-```
-RUN mkdir -p /app/outputs
-```
+We prefer a lightweight Python base image rather than pre-built Jupyter Docker stacks, as we don't need the interactive server components.
+Expected Output
+After execution, there should be a fully executed notebook file named executed_notebook.ipynb in the outputs directory, containing all computed results and generated plots.
+Usage Context
+This is intended for:
 
-### STEP 6: Execution Command Line
-```
-CMD ["jupyter", "nbconvert", "--to", "notebook", "--execute", "On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb", "--output", "/app/outputs/executed_notebook.ipynb", "--ExecutePreprocessor.timeout=600"]
-```
-**RULE: Use jupyter nbconvert with --execute flag. Do NOT use start-notebook.sh**
+Reproducible research environments
+CI/CD pipeline integration
+Automated report generation
+Batch processing of the analysis
 
-## COMPLETE DOCKERFILE - COPY EXACTLY
-```dockerfile
-FROM python:3.11-slim
-WORKDIR /app
-COPY . /app
-RUN pip install --no-cache-dir notebook pandas openpyxl matplotlib numpy scipy nbconvert
-RUN mkdir -p /app/outputs
-CMD ["jupyter", "nbconvert", "--to", "notebook", "--execute", "On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb", "--output", "/app/outputs/executed_notebook.ipynb", "--ExecutePreprocessor.timeout=600"]
-```
-
-## PROHIBITED COMMANDS - DO NOT USE
-
-❌ FROM jupyter/minimal-notebook
-❌ WORKDIR /home/jovyan
-❌ USER jovyan
-❌ EXPOSE 8888
-❌ start-notebook.sh
-❌ RUN pip install jupyterlab
-❌ --NotebookApp.token
-
-## PROJECT INFORMATION
-
-**Project Name**: On_the_Expansion_of_Risk_Pooling
-**Authors**: Michail Anthropelos, Runhuan Feng, Seongyoon Kim
-**Notebook Path**: On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb
-**Execution Mode**: Headless automatic execution
-**Container Type**: Non-interactive batch processing
-
-## PACKAGE REQUIREMENTS
-
-Required packages that MUST be installed:
-- notebook (for Jupyter infrastructure)
-- pandas (data processing)
-- openpyxl (Excel file reading)
-- matplotlib (plotting)
-- numpy (numerical operations)
-- scipy (scientific computing)
-- nbconvert (notebook execution - CRITICAL)
-
-## EXECUTION SPECIFICATIONS
-
-- **Method**: nbconvert with --execute flag
-- **Timeout**: 600 seconds
-- **Output Location**: /app/outputs/executed_notebook.ipynb
-- **Behavior**: Execute notebook and exit (no server)
-- **Ports**: None (headless execution)
-
-## CONTAINER BEHAVIOR
-
-1. Container starts
-2. Runs jupyter nbconvert to execute notebook
-3. Saves executed notebook to /app/outputs/
-4. Container exits automatically
-5. No interactive server runs
+The container will be run with volume mounting to extract the results to the host machine.
