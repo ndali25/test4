@@ -1,29 +1,32 @@
-# Risk Pooling Analysis
+# Risk Pooling Experiments
 
-This project contains a research notebook related to risk pooling.
+This repository contains code and experiments related to risk pooling models.
 
-The work is based on the paper:
-"On the Expansion of Risk Pooling"
-by Michail Anthropelos, Runhuan Feng, and Seongyoon Kim.
+## Contents
 
-## Project Files
+- One or more Jupyter notebooks
+- Python scripts used for numerical experiments
+- Figures generated from simulations
 
-Main notebook:
+## Environment
 
-On_the_Expansion_of_Risk_Pooling__MS__For_final_submission/Code_On_the_Expansion_of_Risk_Pooling.ipynb
+The code runs with Python.
 
-## Requirements
-
-- Python 3.11
-
-Python libraries used in the notebook:
-- pandas
+Some experiments use common scientific Python libraries such as:
 - numpy
 - scipy
+- pandas
 - matplotlib
-- openpyxl
-- notebook
 
-## Goal
+## How it is used
 
-The goal is to run the notebook in a containerized environment so it can be used interactively from a web browser.
+The experiments are usually run by executing the notebooks.
+Sometimes results are generated automatically, and sometimes the notebooks are explored manually.
+
+The environment should be reproducible and easy to run on different machines.
+
+## Notes
+
+- The project was developed in different environments.
+- Some notebooks may rely on features available in interactive environments.
+- No strict assumptions are made about how the code is launched.
